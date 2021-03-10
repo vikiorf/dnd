@@ -3,20 +3,25 @@
 	<div class="add-form">
 		<div>
 			<input type="text" v-model="monsterInput" />
-			<button>Add</button>
+			<!-- <button>Add</button> -->
 		</div>
 		<div class="monster-list" v-if="filteredMonsters.length > 0">
 			<div v-for="monster in filteredMonsters" :key="monster.index">
 				{{ monster.name }} <button @click="addMonster(monster)">Add</button>
 			</div>
 		</div>
-		<div v-else>
+		<div v-else-if="filteredMonsters.length < 1 && monsterInput.length < 1">
 			<p>
 				Search monster
 			</p>
 		</div>
+		<div v-else-if="monsterInput.length > 1 && filteredMonsters.length < 1">
+			<input type="number" placeholder="Initiative" v-model="initiativeInput" />
+			<input type="number" placeholder="Armor Class" v-model="armorClassInput" />
+			<button @click="addCharacter">Add</button>
+		</div>
 	</div>
-	<div class="encounter-group">
+	<div class="encounter-group" v-if="filteredEncounterChars.length > 0">
 		<h3>Group</h3>
 		<Encountered-Item
 			v-for="char in filteredEncounterChars"
@@ -39,7 +44,9 @@
 				charId: 1,
 				monsterInput: '',
 				monsters: [],
-				encounterChars: []
+				encounterChars: [],
+				initiativeInput: '',
+				armorClassInput: ''
 			}
 		},
 		methods: {
@@ -52,6 +59,21 @@
 						})
 					})
 			},
+			addCharacter() {
+				let id = this.charId
+				let characterO = {
+					name: this.monsterInput,
+					order: null,
+					id: id,
+					armor_class: this.armorClassInput,
+					initiative: this.initiativeInput
+				}
+				this.encounterChars.push(characterO)
+				this.monsterInput = ''
+				this.initiativeInput = ''
+				this.armorClassInput = ''
+				this.charId += 1
+			},
 			addMonster(monster) {
 				let id = this.charId
 				let monsterO = {
@@ -59,12 +81,12 @@
 					armor_class: monster.armor_class,
 					order: null,
 					id: id,
-					index: monster.index
+					index: monster.index,
+					initiative: 0
 				}
 				this.encounterChars.push(monsterO)
 				this.monsterInput = ''
 				this.charId += 1
-				console.log(this.encounterChars)
 			},
 			removeCharFromEncounter(char) {
 				let index = this.encounterChars.findIndex(
@@ -74,7 +96,7 @@
 			},
 			rollDices() {
 				this.encounterChars.forEach((char) => {
-					char.order = Math.floor(Math.random() * 20) + 1
+					char.order = Math.floor(Math.random() * 20) + 1 + parseInt(char.initiative)
 				})
 			}
 		},
@@ -89,7 +111,6 @@
 						return 1
 					}
 				})
-				console.log(hej)
 				return hej
 			},
 			filteredMonsters() {
@@ -121,13 +142,13 @@
 		padding-bottom: 10px;
 		display: flex;
 		flex-direction: column;
-		box-shadow: 1px 7px 10px 3px #676767;
+		box-shadow: inset 1px 1px 8px 2px #676767;
 		border-radius: 5px;
 		height: 250px;
 	}
 	.monster-list {
 		height: 200px;
-		overflow-y: scroll;
+		overflow-y: auto;
 	}
 	input {
 		border-top: none;
@@ -146,7 +167,7 @@
 	}
 
 	.encounter-group {
-		margin-top: 10px;
+		margin-top: 15px;
 		border: 1px solid black;
 		box-shadow: 1px 7px 10px 3px #676767;
 		border-radius: 5px;
@@ -157,6 +178,10 @@
 
 	.char {
 		border: 1px solid black;
+		border-radius: 2px;
 		margin-bottom: 5px;
+		display: flex;
+		justify-content: space-around;
+		box-shadow: inset 0px 0px 1px 1px #676767;
 	}
 </style>
