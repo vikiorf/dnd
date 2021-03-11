@@ -60,6 +60,9 @@
 					})
 			},
 			addCharacter() {
+				// if (!this.armorClassInput || !this.initiativeInput) {
+				// 	return
+				// }
 				let id = this.charId
 				let characterO = {
 					name: this.monsterInput,
@@ -96,7 +99,10 @@
 			},
 			rollDices() {
 				this.encounterChars.forEach((char) => {
-					char.order = Math.floor(Math.random() * 20) + 1 + parseInt(char.initiative)
+					char.order = Math.floor(Math.random() * 20) + 1
+					if (char.initiative) {
+						char.order +=  parseInt(char.initiative)
+					}
 				})
 			}
 		},
