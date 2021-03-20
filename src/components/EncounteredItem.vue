@@ -3,7 +3,10 @@
 		<span v-if="char.order">Roll: {{ char.order }}</span>
 		AC:
 		{{ monster.armor_class }} | {{ monster.name }}
-		<button @click="removeChar">Remove</button>
+
+		<img class="image" src="../assets/close.svg" @click="removeChar" />
+
+		<!-- <button @click="removeChar">Remove</button> -->
 		<!-- <p v-for="(value, name, index) in monster" :key="index">{{ name }} | {{ value }}</p> -->
 	</div>
 </template>
@@ -25,7 +28,7 @@
 						.then((res) => {
 							this.monster = res
 						})
-				} else  {
+				} else {
 					this.monster = this.char
 				}
 			},
@@ -38,3 +41,10 @@
 		}
 	}
 </script>
+
+<style scoped>
+	.image {
+		height: 20px;
+		width: 20px;
+	}
+</style>

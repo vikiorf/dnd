@@ -16,8 +16,18 @@
 			</p>
 		</div>
 		<div v-else-if="monsterInput.length > 1 && filteredMonsters.length < 1">
-			<input type="number" placeholder="Initiative" v-model="initiativeInput" />
-			<input type="number" placeholder="Armor Class" v-model="armorClassInput" />
+			<input
+				type="number"
+				placeholder="Initiative"
+				v-model="initiativeInput"
+				:class="{ error: error.initiativeInput }"
+			/>
+			<input
+				type="number"
+				placeholder="Armor Class"
+				v-model="armorClassInput"
+				:class="{ error: error.armorClassInput }"
+			/>
 			<button @click="addCharacter">Add</button>
 		</div>
 	</div>
@@ -46,7 +56,11 @@
 				monsters: [],
 				encounterChars: [],
 				initiativeInput: '',
-				armorClassInput: ''
+				armorClassInput: '',
+				error: {
+					initiativeInput: false,
+					armorClassInput: false
+				}
 			}
 		},
 		methods: {
@@ -60,22 +74,29 @@
 					})
 			},
 			addCharacter() {
-				// if (!this.armorClassInput || !this.initiativeInput) {
-				// 	return
-				// }
-				let id = this.charId
-				let characterO = {
-					name: this.monsterInput,
-					order: null,
-					id: id,
-					armor_class: this.armorClassInput,
-					initiative: this.initiativeInput
+				if (!this.armorClassInput) {
+					this.error.armorClassInput = true
 				}
-				this.encounterChars.push(characterO)
-				this.monsterInput = ''
-				this.initiativeInput = ''
-				this.armorClassInput = ''
-				this.charId += 1
+				if (!this.initiativeInput) {
+					this.error.initiativeInput = true
+				}
+				if (this.initiativeInput && this.armorClassInput) {
+					let id = this.charId
+					let characterO = {
+						name: this.monsterInput,
+						order: null,
+						id: id,
+						armor_class: this.armorClassInput,
+						initiative: this.initiativeInput
+					}
+					this.encounterChars.push(characterO)
+					this.monsterInput = ''
+					this.initiativeInput = ''
+					this.armorClassInput = ''
+					this.error.armorClassInput = false
+					this.error.initiativeInput = false
+					this.charId += 1
+				}
 			},
 			addMonster(monster) {
 				let id = this.charId
@@ -101,7 +122,7 @@
 				this.encounterChars.forEach((char) => {
 					char.order = Math.floor(Math.random() * 20) + 1
 					if (char.initiative) {
-						char.order +=  parseInt(char.initiative)
+						char.order += parseInt(char.initiative)
 					}
 				})
 			}
@@ -155,6 +176,13 @@
 	.monster-list {
 		height: 200px;
 		overflow-y: auto;
+	}
+	.monster-list button {
+		border-radius: 5px;
+		outline: none;
+	}
+	.error {
+		border: 1px solid red;
 	}
 	input {
 		border-top: none;
