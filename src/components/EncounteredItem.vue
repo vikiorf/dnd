@@ -1,8 +1,10 @@
 <template>
 	<div>
-		<span v-if="char.order">Roll: {{ char.order }}</span>
-		AC:
-		{{ monster.armor_class }} | {{ monster.name }}
+		<div class="char-order" v-if="char.order">Roll: {{ char.order }}</div>
+		<span class="char-name">
+			AC:
+			{{ monster.armor_class }} | {{ monster.name }}
+		</span>
 
 		<img class="image" src="../assets/close.svg" @click="removeChar" />
 
@@ -43,6 +45,14 @@
 </script>
 
 <style scoped>
+.char-order {
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-start;
+}
+	.char-name {
+		grid-column: 2;
+	}
 	.image {
 		height: 20px;
 		width: 20px;

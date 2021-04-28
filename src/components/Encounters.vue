@@ -214,8 +214,11 @@
 		border: 1px solid black;
 		border-radius: 2px;
 		margin-bottom: 5px;
-		display: flex;
-		justify-content: space-around;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-rows: 1fr;
+		justify-items: center;
+		align-items: center;
 		box-shadow: inset 0px 0px 1px 1px #676767;
 	}
 </style>
