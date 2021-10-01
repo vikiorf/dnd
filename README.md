@@ -1,4 +1,9 @@
 # dnd
+A small dnd encounter-app.
+You add a character by searching for monster name. If the name does not exist you add your own.
+
+Live demo:
+https://dnd-eta.vercel.app/
 
 ## Project setup
 ```
